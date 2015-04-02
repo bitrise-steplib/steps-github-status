@@ -21,30 +21,30 @@ inputs:
     description: |
       The URL for the repository we are working with
     is_required: true
-    is_expand: false
-    value: "GIT_REPOSITORY_URL"
+    is_expand: true
+    value: ""
     value_options: []
-    is_dont_change_value: true
+    is_dont_change_value: false
   - 
     mapped_to: STEP_GITHUB_STATUS_COMMIT_HASH
     title: "Commit hash"
     description: |
       The commit hash for the commit we are working with
     is_required: true
-    is_expand: false
-    value: "BITRISE_GIT_COMMIT"
+    is_expand: true
+    value: ""
     value_options: []
-    is_dont_change_value: true
+    is_dont_change_value: false
   - 
     mapped_to: STEP_GITHUB_STATUS_BUILD_URL
     title: "Build URL"
     description: |
       Build URL with detailed information for the build
     is_required: true
-    is_expand: false
-    value: "BITRISE_BUILD_URL"
+    is_expand: true
+    value: ""
     value_options: []
-    is_dont_change_value: true
+    is_dont_change_value: false
   - 
     mapped_to: STEP_GITHUB_STATUS_AUTH_TOKEN
     title: "GitHub auth token"
