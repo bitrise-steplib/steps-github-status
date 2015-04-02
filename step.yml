@@ -1,0 +1,61 @@
+name: "Step GitHub Status"
+description: |
+  Update commit status for GitHub repositories
+website: http://www.steplib.com/
+fork_url: https://github.com/bitrise-io/steps-github-status
+source:
+  git: https://github.com/bitrise-io/steps-github-status.git
+host_os_tags:
+  - "osx-10.9"
+  - "osx-10.10"
+project_type_tags: []
+type_tags:
+  - "github"
+  - "status"
+is_requires_admin_user: false
+is_always_run: true
+inputs:
+  - 
+    mapped_to: STEP_GITHUB_STATUS_REPOSITORY_URL
+    title: "Repository URL"
+    description: |
+      The URL for the repository we are working with
+    is_required: true
+    is_expand: false
+    value: "GIT_REPOSITORY_URL"
+    value_options: []
+    is_dont_change_value: true
+  - 
+    mapped_to: STEP_GITHUB_STATUS_COMMIT_HASH
+    title: "Commit hash"
+    description: |
+      The commit hash for the commit we are working with
+    is_required: true
+    is_expand: false
+    value: "BITRISE_GIT_COMMIT"
+    value_options: []
+    is_dont_change_value: true
+  - 
+    mapped_to: STEP_GITHUB_STATUS_BUILD_URL
+    title: "Build URL"
+    description: |
+      Build URL with detailed information for the build
+    is_required: true
+    is_expand: false
+    value: "BITRISE_BUILD_URL"
+    value_options: []
+    is_dont_change_value: true
+  - 
+    mapped_to: STEP_GITHUB_STATUS_AUTH_TOKEN
+    title: "GitHub auth token"
+    description: |
+      Authorization token for GitHub applications
+
+      You can create one for yourself at the following url:
+      [https://github.com/settings/applications#personal-access-tokens](https://github.com/settings/applications#personal-access-tokens)
+    is_required: true
+    is_expand: false
+    value: ""
+    value_options: []
+    is_dont_change_value: false
+outputs: []
