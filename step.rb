@@ -55,4 +55,4 @@ if response.code.eql?('201')
 else
 	puts "Failed to update commit status"
 end
-exit (response.code == 201 ? 0 : 1)
+exit (response.code.eql?('201') ? 0 : 1)
