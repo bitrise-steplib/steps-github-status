@@ -9,8 +9,8 @@ if url.to_s.eql? ''
 end
 
 unless (/([A-Za-z0-9]+@|http(|s)\:\/\/)(github.com)(:|\/)(?<user>[A-Za-z0-9]+)\/(?<repo>[^.]+)(\.git)?/ =~ url) == 0
-	puts "Not a GitHub repository"
-	return 1
+	puts "#{url} is not a GitHub repository"
+	exit 1
 end
 
 build_is_green = ENV["STEPLIB_BUILD_STATUS"] == "0"
