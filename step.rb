@@ -33,8 +33,8 @@ if ci_build_url.to_s.eql? ''
 	exit 1
 end
 
-base_url = ENV["STEP_GITHUB_API_BASE_URL"] || "https://api.github.com"
-uri = URI.parse("#{base_url}/repos/#{user}/#{repo}/statuses/#{commit_hash}")
+api_base_url = ENV["STEP_GITHUB_API_BASE_URL"]
+uri = URI.parse("#{api_base_url}/repos/#{user}/#{repo}/statuses/#{commit_hash}")
 http = Net::HTTP.new(uri.host, uri.port)
 
 http.use_ssl = true

@@ -58,4 +58,24 @@ inputs:
     value: ""
     value_options: []
     is_dont_change_value: false
+  - 
+    mapped_to: STEP_GITHUB_STATUS_API_TOKEN
+    title: "GitHub api token"
+    description: |
+      Personal access token for GitHub, if use custom authorization token.
+
+      You can create one for yourself at the following url:
+      [https://github.com/settings/tokens](https://github.com/settings/tokens)
+    value_options: []
+    is_dont_change_value: false
+  - 
+    mapped_to: STEP_GITHUB_API_BASE_URL
+    title: "GitHub api base url"
+    description: |
+      API URL for GitHub or Github Enterprise
+    is_required: true
+    is_expand: false
+    value: "https://api.github.com"
+    ivalue_options: []
+    is_dont_change_value: false
 outputs: []
