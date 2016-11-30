@@ -8,14 +8,14 @@ if url.to_s.eql? ''
 	exit 1
 end
 
-unless (/([A-Za-z0-9]+@|http(|s)\:\/\/)(github.com)(:|\/)(?<user>[A-Za-z0-9]+)\/(?<repo>[^.]+)(\.git)?/ =~ url) == 0
+unless (/([A-Za-z0-9]+@|http(|s)\:\/\/)([A-Za-z0-9.-]+)(:|\/)(?<user>[A-Za-z0-9]+)\/(?<repo>[^.]+)(\.git)?/ =~ url) == 0
 	puts "#{url} is not a GitHub repository"
 	exit 1
 end
 
 build_is_green = ENV["STEPLIB_BUILD_STATUS"] == "0"
 commit_hash = ENV["STEP_GITHUB_STATUS_COMMIT_HASH"]
-authorization_token = ENV["STEP_GITHUB_STATUS_AUTH_TOKEN"]
+authorization_token = ENV["STEP_GITHUB_STATUS_API_TOKEN"] || ENV["STEP_GITHUB_STATUS_AUTH_TOKEN"]
 ci_build_url = ENV["STEP_GITHUB_STATUS_BUILD_URL"]
 
 if commit_hash.to_s.eql? ''
@@ -33,7 +33,8 @@ if ci_build_url.to_s.eql? ''
 	exit 1
 end
 
-uri = URI.parse("https://api.github.com/repos/#{user}/#{repo}/statuses/#{commit_hash}")
+base_url = ENV["STEP_GITHUB_API_BASE_URL"] || "https://api.github.com"
+uri = URI.parse("#{base_url}/repos/#{user}/#{repo}/statuses/#{commit_hash}")
 http = Net::HTTP.new(uri.host, uri.port)
 
 http.use_ssl = true
