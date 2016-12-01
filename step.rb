@@ -2,29 +2,45 @@ require 'net/http'
 require 'net/https'
 require 'json/ext'
 
-api_base_url = ENV['STEP_GITHUB_API_BASE_URL']
-repository_url = ENV['STEP_GITHUB_STATUS_REPOSITORY_URL']
-commit_hash = ENV['STEP_GITHUB_STATUS_COMMIT_HASH']
-ci_build_url = ENV['STEP_GITHUB_STATUS_BUILD_URL']
-authorization_token = ENV['STEP_GITHUB_STATUS_API_TOKEN'] || ENV['STEP_GITHUB_STATUS_AUTH_TOKEN']
+# Inputs
+api_base_url = ENV['api_base_url']
+repository_url = ENV['repository_url']
+commit_hash = ENV['commit_hash']
+ci_build_url = ENV['build_url']
+authorization_token = ENV['auth_token']
 build_is_green = ENV['STEPLIB_BUILD_STATUS'] == '0'
 
-puts 'Config:'
-puts "api_base_url: #{api_base_url}"
-puts "repository_url: #{repository_url}"
-puts "commit_hash: #{commit_hash}"
-puts "ci_build_url: #{ci_build_url}"
-puts 'authorization_token: ' + (authorization_token.to_s.eql? '') ? 'empty' : '***'
-puts "build_is_green: #{build_is_green}"
+secure_token = ''
+secure_token = '***' unless authorization_token.to_s.eql? ''
 
-if url.to_s.eql? ''
-  puts 'No repository url specified'
+puts 'Config:'
+puts "  api_base_url: #{api_base_url}"
+puts "  repository_url: #{repository_url}"
+puts "  commit_hash: #{commit_hash}"
+puts "  ci_build_url: #{ci_build_url}"
+puts "  authorization_token: #{secure_token}"
+puts "  build_is_green: #{build_is_green}"
+puts
+
+if repository_url.to_s.eql? ''
+  puts 'No repository repository_url specified'
   exit 1
 end
 
+user = ''
+repo = ''
 regexp = %r{([A-Za-z0-9]+@|http(|s)\:\/\/)([A-Za-z0-9.-]+)(:|\/)(?<user>[A-Za-z0-9]+)\/(?<repo>[^.]+)(\.git)?}
-unless (regexp =~ url).zero?
-  puts "#{url} is not a GitHub repository"
+match = repository_url.match(regexp)
+if match
+  captures = match.captures
+  if captures.length == 2
+    user = captures[0]
+    repo = captures[1]
+  end
+end
+
+unless user.length && repo.length
+  puts "#{repository_url} is not a GitHub repository"
   exit 1
 end
 
@@ -43,7 +59,14 @@ if authorization_token.to_s.eql? ''
   exit 1
 end
 
+# Main
+puts "Update status of #{repo}, owner: #{user}"
+
 uri = URI.parse("#{api_base_url}/repos/#{user}/#{repo}/statuses/#{commit_hash}")
+
+puts "  uri: #{uri}"
+puts
+
 http = Net::HTTP.new(uri.host, uri.port)
 
 http.use_ssl = true
@@ -58,11 +81,16 @@ req.body = {
   description: (build_is_green ? 'The build succeeded' : 'The build failed. Check the logs on Bitrise'),
   context: 'continuous-integration/bitrise'
 }.to_json
+
 response = http.request(req)
 
-if response.code.eql?('201')
-  puts "Updated status for commit #{commit_hash}"
-else
+unless response.code.eql?('201')
+  puts "Response status code: #{response.code}"
+  puts "Response message: #{response.message}"
+  puts "Response body: #{response.body}"
   puts 'Failed to update commit status'
+  exit 1
 end
-exit (response.code.eql?('201') ? 0 : 1)
+
+puts "Updated status for commit #{commit_hash}"
+exit 0

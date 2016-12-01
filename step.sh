@@ -1,5 +1,5 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 ruby step.rb
