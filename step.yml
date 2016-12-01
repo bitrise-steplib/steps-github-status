@@ -1,81 +1,49 @@
-name: "Step GitHub Status"
-description: |
+title: Step GitHub Status
+summary: |-
   Update commit status for GitHub repositories
-website: http://www.steplib.com/
-fork_url: https://github.com/bitrise-io/steps-github-status
-source:
-  git: https://github.com/bitrise-io/steps-github-status.git
-host_os_tags:
-  - "osx-10.9"
-  - "osx-10.10"
+description: |-
+  Update commit status for GitHub repositories
+website: https://github.com/bitrise-io/steps-github-status
+source_code_url: https://github.com/bitrise-io/steps-github-status
+support_url: https://github.com/bitrise-io/steps-github-status/issues
+host_os_tags: []
 project_type_tags: []
-type_tags:
-  - "github"
-  - "status"
+type_tags: 
+- "github"
+- "status"
 is_requires_admin_user: false
 is_always_run: true
+is_skippable: false
 inputs:
-  - 
-    mapped_to: STEP_GITHUB_STATUS_REPOSITORY_URL
-    title: "Repository URL"
-    description: |
-      The URL for the repository we are working with
-    is_required: true
-    is_expand: true
-    value: ""
-    value_options: []
-    is_dont_change_value: false
-  - 
-    mapped_to: STEP_GITHUB_STATUS_COMMIT_HASH
-    title: "Commit hash"
-    description: |
-      The commit hash for the commit we are working with
-    is_required: true
-    is_expand: true
-    value: ""
-    value_options: []
-    is_dont_change_value: false
-  - 
-    mapped_to: STEP_GITHUB_STATUS_BUILD_URL
-    title: "Build URL"
-    description: |
-      Build URL with detailed information for the build
-    is_required: true
-    is_expand: true
-    value: ""
-    value_options: []
-    is_dont_change_value: false
-  - 
-    mapped_to: STEP_GITHUB_STATUS_AUTH_TOKEN
-    title: "GitHub auth token"
-    description: |
-      Authorization token for GitHub applications
+  - repository_url: "STEP_GITHUB_STATUS_REPOSITORY_URL"
+    opts:
+      title: "Repository URL"
+      summary: ""
+      description: |-
+        The URL for the repository we are working with
+      is_required: true
+  - commit_hash: "STEP_GITHUB_STATUS_COMMIT_HASH"
+    opts:
+      title: "Commit hash"
+      summary: ""
+      description: |-
+        The commit hash for the commit we are working with
+      is_required: true
+  - build_url: "STEP_GITHUB_STATUS_BUILD_URL"
+    opts:
+      title: "Build URL"
+      summary: ""
+      description: |-
+        Build URL with detailed information for the build
+      is_required: true
+  - auth_token: "STEP_GITHUB_STATUS_AUTH_TOKEN"
+    opts:
+      title: "GitHub auth token"
+      summary: ""
+      description: |-
+        Authorization token for GitHub applications
 
-      You can create one for yourself at the following url:
-      [https://github.com/settings/applications#personal-access-tokens](https://github.com/settings/applications#personal-access-tokens)
-    is_required: true
-    is_expand: false
-    value: ""
-    value_options: []
-    is_dont_change_value: false
-  - 
-    mapped_to: STEP_GITHUB_STATUS_API_TOKEN
-    title: "GitHub api token"
-    description: |
-      Personal access token for GitHub, if use custom authorization token.
-
-      You can create one for yourself at the following url:
-      [https://github.com/settings/tokens](https://github.com/settings/tokens)
-    value_options: []
-    is_dont_change_value: false
-  - 
-    mapped_to: STEP_GITHUB_API_BASE_URL
-    title: "GitHub api base url"
-    description: |
-      API URL for GitHub or Github Enterprise
-    is_required: true
-    is_expand: false
-    value: "https://api.github.com"
-    ivalue_options: []
-    is_dont_change_value: false
-outputs: []
+        You can create one for yourself at the following url:
+        [https://github.com/settings/applications#personal-access-tokens](https://github.com/settings/applications#personal-access-tokens)
+      is_required: true
+      
