@@ -15,6 +15,13 @@ is_requires_admin_user: false
 is_always_run: true
 is_skippable: false
 inputs:
+  - base_url: "https://api.github.com"
+    opts:
+      title: "GitHub api base url"
+      summary: ""
+      description: |-
+        API URL for GitHub or Github Enterprise
+      is_required: true
   - repository_url: "STEP_GITHUB_STATUS_REPOSITORY_URL"
     opts:
       title: "Repository URL"
