@@ -1,140 +1,91 @@
-# Steps Github Status
+# Step GitHub Status
+
+Update commit status for GitHub repositories
+
+## How to use this Step
+
+Can be run directly with the [bitrise CLI](https://github.com/bitrise-io/bitrise),
+just `git clone` this repository, `cd` into it's folder in your Terminal/Command Line
+and call `bitrise run test`.
+
+*Check the `bitrise.yml` file for required inputs which have to be
+added to your `.bitrise.secrets.yml` file!*
+
+Step by step:
+
+1. Open up your Terminal / Command Line
+2. `git clone` the repository
+3. `cd` into the directory of the step (the one you just `git clone`d)
+5. Create a `.bitrise.secrets.yml` file in the same directory of `bitrise.yml` - the `.bitrise.secrets.yml` is a git ignored file, you can store your secrets in
+6. Check the `bitrise.yml` file for any secret you should set in `.bitrise.secrets.yml`
+  * Best practice is to mark these options with something like `# define these in your .bitrise.secrets.yml`, in the `app:envs` section.
+7. Once you have all the required secret parameters in your `.bitrise.secrets.yml` you can just run this step with the [bitrise CLI](https://github.com/bitrise-io/bitrise): `bitrise run test`
+
+An example `.bitrise.secrets.yml` file:
+
+```
+envs:
+- A_SECRET_PARAM_ONE: the value for secret one
+- A_SECRET_PARAM_TWO: the value for secret two
+```
+
+## How to create your own step
+
+1. Create a new git repository for your step (**don't fork** the *step template*, create a *new* repository)
+2. Copy the [step template](https://github.com/bitrise-steplib/step-template) files into your repository
+3. Fill the `step.sh` with your functionality
+4. Wire out your inputs to `step.yml` (`inputs` section)
+5. Fill out the other parts of the `step.yml` too
+6. Provide test values for the inputs in the `bitrise.yml`
+7. Run your step with `bitrise run test` - if it works, you're ready
+
+__For Step development guidelines & best practices__ check this documentation: [https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md](https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md).
+
+**NOTE:**
+
+If you want to use your step in your project's `bitrise.yml`:
+
+1. git push the step into it's repository
+2. reference it in your `bitrise.yml` with the `git::PUBLIC-GIT-CLONE-URL@BRANCH` step reference style:
+
+```
+- git::https://github.com/user/my-step.git@branch:
+   title: My step
+   inputs:
+   - my_input_1: "my value 1"
+   - my_input_2: "my value 2"
+```
+
+You can find more examples of step reference styles
+in the [bitrise CLI repository](https://github.com/bitrise-io/bitrise/blob/master/_examples/tutorials/steps-and-workflows/bitrise.yml#L65).
+
+## How to contribute to this Step
+
+1. Fork this repository
+2. `git clone` it
+3. Create a branch you'll work on
+4. To use/test the step just follow the **How to use this Step** section
+5. Do the changes you want to
+6. Run/test the step before sending your contribution
+  * You can also test the step in your `bitrise` project, either on your Mac or on [bitrise.io](https://www.bitrise.io)
+  * You just have to replace the step ID in your project's `bitrise.yml` with either a relative path, or with a git URL format
+  * (relative) path format: instead of `- original-step-id:` use `- path::./relative/path/of/script/on/your/Mac:`
+  * direct git URL format: instead of `- original-step-id:` use `- git::https://github.com/user/step.git@branch:`
+  * You can find more example of alternative step referencing at: https://github.com/bitrise-io/bitrise/blob/master/_examples/tutorials/steps-and-workflows/bitrise.yml
+7. Once you're done just commit your changes & create a Pull Request
 
 
+## Share your own Step
 
-## Test run this Step on your own machine
+You can share your Step or step version with the [bitrise CLI](https://github.com/bitrise-io/bitrise). If you use the `bitrise.yml` included in this repository, all you have to do is:
 
-Steps get their inputs through Environment Variables.
-The Step's inputs are described in the `step.yml` Step
-description file.
+1. In your Terminal / Command Line `cd` into this directory (where the `bitrise.yml` of the step is located)
+1. Run: `bitrise run test` to test the step
+1. Run: `bitrise run audit-this-step` to audit the `step.yml`
+1. Check the `share-this-step` workflow in the `bitrise.yml`, and fill out the
+   `envs` if you haven't done so already (don't forget to bump the version number if this is an update
+   of your step!)
+1. Then run: `bitrise run share-this-step` to share the step (version) you specified in the `envs`
+1. Send the Pull Request, as described in the logs of `bitrise run share-this-step`
 
-To run a Step locally you have to define it's
-inputs (environment variables) before you could run
-the Step.
-
-A simple way to do this in your Command Line / Terminal
-is to call it like this:
-
-	cd path/to/step/directory
-
-    (
-    	export INPUT_VAR_1="My value 1"
-    	export INPUT_VAR_2="My value 2"
-    	...
-    	bash step.sh
-    )
-
-*Including the environment variable definitions
-in a `(...)` block helps to keep your
-Command Line / Terminal environment clean, those
-input environments are only available
-inside the `(...)` block.*
-
-If you plan to test it multiple times you can
-save this as a shell script
-and simply call it as many times as you want to.
-
-
-## Create your own Step:
-
-1. Create a new repository on GitHub
-2. Copy the files from the [step-template repository](https://github.com/steplib/step-template)
-3. Commit and push it
-
-Hurray, you just created your first Step repository!
-You can now start coding and when you're ready
-you can submit your Step to the [Open Step Library](http://www.steplib.com/).
-
-
-## Step Repository Structure
-
-### step.sh
-
-This is the **entry point of the Step**. A StepLib
-system will execute this file when it runs the Step.
-You can run other scripts and programs from
-*step.sh*. For example if you want to write your
-Step in ruby then all you have to include in the *step.sh*
-file is the code to run your own ruby script,
-something like this:
-
-    #!/bin/bash
-  
-    THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  
-    ruby "${THIS_SCRIPT_DIR}/my_ruby_script.rb"
-    exit $?
-
-
-**inputs**: a Step should get it's inputs through
-*environment variables*. These inputs can be (and should be)
-specified in the *step.yml* description of the Step.
-
-**exit code**: the exit code generated by step.sh
-is interpreted as the success/failure code of the whole Step.
-If it returns 0 the Step will be considered as successful.
-If it returns with a greater than 0 exit code then
-the Step is considered to be failed.
-
-
-### step.yml
-
-Description of the step in YAML format.
-
-Specifies information for StepLib users like what platforms
-the Step supports, what's the official website of the
-Step, where can a user find the Step's code and
-where can a user fork the Step.
-
-Also defines an input list for the Step which then
-can be presented as User Interface for the Step
-and a StepLib compatible system can interpret these
-inputs and map the user input values to
-environment variables which will be available for the Step.
-
-For a full description of the *step.yml* description
-file see the documentation on GitHub: [https://github.com/steplib/steplib/blob/master/docs/step_format.md](https://github.com/steplib/steplib/blob/master/docs/step_format.md)
-
-
-### LICENSE
-
-We don't accept steps into the StepLib without a license included in it!
-Read more about why it's important to have a license file
-in your open source repository on GitHub: [https://github.com/steplib/steplib/blob/master/templates/step/LICENSE](https://github.com/steplib/steplib/blob/master/templates/step/LICENSE).
-
-
-### README.md
-
-Technically README is not required but we strongly suggest
-against not using one.
-
-It can be a very simple description of what your Step does,
-in just a couple of sentences.
-
-Best practice is to include information about how
-someone else can contribute to the development of the Step.
-
-You can also include a link to the StepLib website, including your
-own Step's page on StepLib (once it's submitted
-into the Open StepLib collection), something like this:
-
-This Step is part of the [Open StepLib](http://www.steplib.com/),
-you can find its page on StepLib [here](http://www.steplib.com/step/your-step-id).
-
-
-## How to submit your Step into the Open Step Library
-
-To submit a Step to the [Open Step Library](http://www.steplib.com/)
-you have to create a Pull Request in the StepLib's spec repository
-and include your step's `step.yml` description file
-in the **steps/** folder.
-
-1. Create your Step repository as described above.
-2. Fork the StepLib spec repository: [https://github.com/steplib/steplib](https://github.com/steplib/steplib)
-3. Create a new folder inside the **steps/** folder (in your forked StepLib spec repository) if it's the first version of your Step. (Example path: `steps/my-step`). *Note: The name of the folder will be the ID of your Step.*
-4. Create a folder inside your step's folder with the name of a version tag you added to your Step repository. (Example path: `steps/my-step/1.0.0`). **You have to actually use this tag in your repository**. When a user wants to use this version of your Step the StepLib system will try to clone your Step repository with the specified version tag!
-5. Copy your step.yml into this version folder (Example path: `steps/my-step/1.0.0/step.yml`)
-6. Create and send a Pull Request
-
-*Before you submit your Step into a Step Library you should test it in a StepLib compatible system.
-You can use a free [Bitrise](http://www.bitrise.io/) account to test your Step.*
+That's all ;)
