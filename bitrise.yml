@@ -16,6 +16,9 @@ workflows:
   # --- workflow to Step Test
   ci:
     steps:
+    - change-workdir:
+        inputs:
+        - path: ./_tmp
     - path::./: 
         inputs:
         - auth_token: "$AUTH_TOKEN"
