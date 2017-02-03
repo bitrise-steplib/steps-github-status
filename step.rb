@@ -77,7 +77,11 @@ http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 req = Net::HTTP::Post.new(uri.path)
 req['Authorization'] = "token #{authorization_token}"
 
-status = specific_status || (build_is_green ? 'success' : 'failure')
+status = specific_status
+
+if status.empty?
+  status = (build_is_green ? 'success' : 'failure')
+end  
 
 req.body = {
   state: status,
