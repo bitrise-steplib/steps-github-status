@@ -9,6 +9,7 @@ commit_hash = ENV['commit_hash']
 ci_build_url = ENV['build_url']
 authorization_token = ENV['auth_token']
 build_is_green = ENV['STEPLIB_BUILD_STATUS'] == '0'
+specific_status = ENV['set_specific_status']
 
 secure_token = ''
 secure_token = '***' unless authorization_token.to_s.eql? ''
@@ -75,8 +76,11 @@ http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
 req = Net::HTTP::Post.new(uri.path)
 req['Authorization'] = "token #{authorization_token}"
+
+status = specific_status || (build_is_green ? 'success' : 'failure')
+
 req.body = {
-  state: (build_is_green ? 'success' : 'failure'),
+  state: status,
   target_url: ci_build_url,
   description: (build_is_green ? 'The build succeeded' : 'The build failed. Check the logs on Bitrise'),
   context: 'continuous-integration/bitrise'
