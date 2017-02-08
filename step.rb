@@ -21,6 +21,7 @@ puts "  commit_hash: #{commit_hash}"
 puts "  ci_build_url: #{ci_build_url}"
 puts "  authorization_token: #{secure_token}"
 puts "  build_is_green: #{build_is_green}"
+puts "  specific_status: #{specific_status}"
 puts
 
 if repository_url.to_s.eql? ''
