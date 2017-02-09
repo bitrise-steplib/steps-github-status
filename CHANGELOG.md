@@ -1,6 +1,11 @@
-## Changelog (Current version: 0.9.1)
+## Changelog (Current version: 1.0.0)
 
 -----------------
+
+### 1.0.0 (2017 Feb 09)
+
+* [1fbbca4] prepare for 1.0.0
+* [30e08c6] Add specific status option to config (#5)
 
 ### 0.9.1 (2017 Jan 27)
 
@@ -11,4 +16,4 @@
 
 -----------------
 
-Updated: 2017 Jan 27
+Updated: 2017 Feb 09
