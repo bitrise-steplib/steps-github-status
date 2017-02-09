@@ -1,6 +1,11 @@
-## Changelog (Current version: 1.0.0)
+## Changelog (Current version: 1.0.1)
 
 -----------------
+
+### 1.0.1 (2017 Feb 09)
+
+* [ffaaf5f] prepare for 1.0.1
+* [403c8f5] removed value_options from `set_specific_status` input
 
 ### 1.0.0 (2017 Feb 09)
 
