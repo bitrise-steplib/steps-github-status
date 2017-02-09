@@ -63,11 +63,3 @@ inputs:
         If set, this step will set a specific status instead of reporting the current build status.
         
         Can be one of pending, success, error, or failure.
-      value_options:
-        - ""
-        - "pending"
-        - "success"
-        - "error"
-        - "failure"
-      is_required: false
-
