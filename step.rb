@@ -31,7 +31,7 @@ end
 
 user = ''
 repo = ''
-regexp = %r{([A-Za-z0-9]+@|http(|s)\:\/\/)([A-Za-z0-9.-]+)(:|\/)(?<user>[A-Za-z0-9]+)\/(?<repo>[^.]+)(\.git)?}
+regexp = %r{([A-Za-z0-9]+@|http(|s)\:\/\/)([A-Za-z0-9.-]+)(:|\/)(?<user>[^.]+)\/(?<repo>[^.]+)(\.git)?}
 match = repository_url.match(regexp)
 if match
   captures = match.captures
