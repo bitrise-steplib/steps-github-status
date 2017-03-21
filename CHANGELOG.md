@@ -1,6 +1,11 @@
-## Changelog (Current version: 1.0.1)
+## Changelog (Current version: 1.0.2)
 
 -----------------
+
+### 1.0.2 (2017 Mar 21)
+
+* [a2018b6] prepare for 1.0.2
+* [a3ccfd2] Fix regex parsing for username (#6)
 
 ### 1.0.1 (2017 Feb 09)
 
@@ -21,4 +26,4 @@
 
 -----------------
 
-Updated: 2017 Feb 09
+Updated: 2017 Mar 21
