@@ -6,10 +6,10 @@ app:
   - STEP_VERSION: 1.0.2
 
   # define these in your .bitrise.secrets.yml
-  - AUTH_TOKEN: "$AUTH_TOKEN"
-  - GIT_REPOSITORY_URL: $GIT_REPOSITORY_URL
-  - BITRISE_GIT_COMMIT: $BITRISE_GIT_COMMIT
-  - BITRISE_BUILD_URL: $BITRISE_BUILD_URL
+  - TEST_AUTH_TOKEN: "$TEST_AUTH_TOKEN"
+  - TEST_REPOSITORY_URL: $TEST_REPOSITORY_URL
+  - TEST_GIT_COMMIT: $TEST_GIT_COMMIT
+  - TEST_BUILD_URL: $TEST_BUILD_URL
 
 workflows:
   # ----------------------------------------------------------------
@@ -25,7 +25,10 @@ workflows:
         - path: ./_tmp
     - path::./: 
         inputs:
-        - auth_token: "$AUTH_TOKEN"
+        - auth_token: "$TEST_AUTH_TOKEN"
+        - repository_url: $TEST_REPOSITORY_URL
+        - commit_hash: $TEST_GIT_COMMIT
+        - build_url: $TEST_BUILD_URL
 
   # ----------------------------------------------------------------
   # --- workflows to create Release
