@@ -1,4 +1,4 @@
-# Step GitHub Status
+# GitHub Status Step
 
 Update commit status for GitHub repositories
 
