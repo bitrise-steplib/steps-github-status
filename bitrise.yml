@@ -17,6 +17,10 @@ workflows:
   ci:
     steps:
     - script:
+        title: bundle install
+        inputs:
+        - content: bundle install
+    - script:
         title: rspec
         inputs:
         - content: bundle exec rspec
