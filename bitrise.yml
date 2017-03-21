@@ -16,6 +16,10 @@ workflows:
   # --- workflow to Step Test
   ci:
     steps:
+    - script:
+        title: rspec
+        inputs:
+        - content: bundle exec rspec
     - change-workdir:
         inputs:
         - path: ./_tmp
