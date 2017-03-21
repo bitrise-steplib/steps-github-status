@@ -1,6 +1,11 @@
-## Changelog (Current version: 1.0.2)
+## Changelog (Current version: 1.0.3)
 
 -----------------
+
+### 1.0.3 (2017 Mar 21)
+
+* [87e9d8c] prepare for 1.0.3
+* [b701a4a] tests (#7)
 
 ### 1.0.2 (2017 Mar 21)
 
