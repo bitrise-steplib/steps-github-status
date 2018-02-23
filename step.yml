@@ -52,7 +52,7 @@ inputs:
       description: |-
         API URL for GitHub or Github Enterprise
       is_required: true
-  - status_identifier: "continous-integration/bitrise"
+  - status_identifier: "continuous-integration/bitrise"
     opts:
       title: "Status Identifier"
       summary: ""
