@@ -1,6 +1,14 @@
-## Changelog (Current version: 1.0.3)
+## Changelog (Current version: 1.0.4)
 
 -----------------
+
+### 1.0.4 (2018 Feb 23)
+
+* [9079534] STEP_VERSION: 1.0.4
+* [20b3c3c] Merge pull request #11 from FutureWorkshops/master
+* [d7f5e82] Merge pull request #1 from FutureWorkshops/tsl_patch
+* [d254501] Point to correct ssl value
+* [5cb92aa] Change TSL version to fix GitHub connection
 
 ### 1.0.3 (2017 Mar 21)
 
@@ -31,4 +39,4 @@
 
 -----------------
 
-Updated: 2017 Mar 21
+Updated: 2018 Feb 23
