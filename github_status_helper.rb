@@ -11,6 +11,7 @@ class Config
     @ci_build_url = ENV['build_url']
     @authorization_token = ENV['auth_token']
     @build_is_green = ENV['STEPLIB_BUILD_STATUS'] == '0'
+    @status_identifier = ENV['status_identifier']
     @specific_status = ENV['set_specific_status']
   end
 
@@ -25,6 +26,7 @@ class Config
     puts "  ci_build_url: #{@ci_build_url}"
     puts "  authorization_token: #{secure_token}"
     puts "  build_is_green: #{@build_is_green}"
+    puts "  status_identifier: #{@status_identifier}"
     puts "  specific_status: #{@specific_status}"
     puts
   end
@@ -34,6 +36,7 @@ class Config
     raise 'No commit hash specified' if @commit_hash.to_s.empty?
     raise 'No build url specified' if @ci_build_url.to_s.empty?
     raise 'No authorization_token specified' if @authorization_token.to_s.empty?
+    raise 'No status_identifier specified' if @status_identifier.to_s.empty?
   end
 
   attr_reader :api_base_url
@@ -42,6 +45,7 @@ class Config
   attr_reader :ci_build_url
   attr_reader :authorization_token
   attr_reader :build_is_green
+  attr_reader :status_identifier
   attr_reader :specific_status
 end
 
@@ -66,7 +70,7 @@ class GithubStatusHelper
     return [user, repo]
   end
 
-  def perform(user, repo, api_base_url, commit_hash, authorization_token, build_is_green, ci_build_url, specific_status)
+  def perform(user, repo, api_base_url, commit_hash, authorization_token, build_is_green, ci_build_url, status_identifier, specific_status)
     uri = URI.parse("#{api_base_url}/repos/#{user}/#{repo}/statuses/#{commit_hash}")
 
     puts "  uri: #{uri}"
@@ -91,7 +95,7 @@ class GithubStatusHelper
       state: status,
       target_url: ci_build_url,
       description: (build_is_green ? 'The build succeeded' : 'The build failed. Check the logs on Bitrise'),
-      context: 'continuous-integration/bitrise'
+      context: status_identifier
     }.to_json
 
     return http.request(req)

@@ -15,6 +15,7 @@ begin
     config.authorization_token,
     config.build_is_green,
     config.ci_build_url,
+    config.status_identifier,
     config.specific_status
   )
 
