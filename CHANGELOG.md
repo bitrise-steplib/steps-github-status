@@ -1,6 +1,11 @@
-## Changelog (Current version: 1.0.4)
+## Changelog (Current version: 1.1.0)
 
 -----------------
+
+### 1.1.0 (2018 Feb 26)
+
+* [2dd7cfe] Bump version to 1.1.0
+* [dc870a1] feat: introduce custom status identifiers (#12)
 
 ### 1.0.4 (2018 Feb 23)
 
@@ -39,4 +44,4 @@
 
 -----------------
 
-Updated: 2018 Feb 23
+Updated: 2018 Feb 26
