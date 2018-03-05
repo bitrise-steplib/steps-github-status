@@ -32,7 +32,7 @@ class Config
   end
 
   def validate
-    raise "\e[33mGitLab requires a commit hash for build status reporting\e[0m" if @commit_hash.to_s.empty?
+    raise "\e[33mGitHub requires a commit hash for build status reporting\e[0m" if @commit_hash.to_s.empty?
     raise 'No repository repository_url specified' if @repository_url.to_s.empty?
     raise 'No build url specified' if @ci_build_url.to_s.empty?
     raise 'No authorization_token specified' if @authorization_token.to_s.empty?
