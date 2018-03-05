@@ -10,7 +10,7 @@ type_tags:
 - utility
 is_requires_admin_user: false
 is_always_run: true
-is_skippable: false
+is_skippable: true
 inputs:
   - auth_token: ""
     opts:
