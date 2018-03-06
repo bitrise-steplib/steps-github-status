@@ -12,8 +12,7 @@ import (
 	"github.com/bitrise-tools/go-steputils/stepconf"
 )
 
-// Config ...
-type Config struct {
+type config struct {
 	AuthToken     string `env:"auth_token,required"`
 	RepositoryURL string `env:"repository_url,required"`
 	CommitHash    string `env:"commit_hash,required"`
@@ -24,21 +23,11 @@ type Config struct {
 	StatusIdentifier string `env:"status_identifier"`
 }
 
-// StatusRequest ...
-type StatusRequest struct {
+type statusRequest struct {
 	State       string `json:"state"`
 	TargetURL   string `json:"target_url,omitempty"`
 	Description string `json:"description,omitempty"`
 	Context     string `json:"context,omitempty"`
-}
-
-func newStatusRequest(cfg Config) StatusRequest {
-	return StatusRequest{
-		State:       getState(cfg.State),
-		TargetURL:   cfg.BuildURL,
-		Description: strings.Title(getState(cfg.State)),
-		Context:     cfg.StatusIdentifier,
-	}
 }
 
 // getOwner get the owner part of a git repository url. Possible url formats:
@@ -71,11 +60,16 @@ func getState(preset string) string {
 // createStatus creates a commit status for the given commit.
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
-func createStatus(cfg Config) error {
+func createStatus(cfg config) error {
 	format := "%s/repos/%s/%s/statuses/%s"
 	url := fmt.Sprintf(format, cfg.APIURL, getOwner(cfg.RepositoryURL), getRepo(cfg.RepositoryURL), cfg.CommitHash)
 
-	body, err := json.Marshal(newStatusRequest(cfg))
+	body, err := json.Marshal(statusRequest{
+		State:       getState(cfg.State),
+		TargetURL:   cfg.BuildURL,
+		Description: strings.Title(getState(cfg.State)),
+		Context:     cfg.StatusIdentifier,
+	})
 	if err != nil {
 		return err
 	}
@@ -105,7 +99,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var cfg Config
+	var cfg config
 	if err := stepconf.Parse(&cfg); err != nil {
 		log.Errorf("Error: %s\n", err)
 		os.Exit(1)

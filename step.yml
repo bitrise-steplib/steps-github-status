@@ -52,11 +52,6 @@ inputs:
       summary: ""
       description: |-
         API URL for GitHub or Github Enterprise
-        #  - description: ""
-        #    opts:
-        #      title: "Description"
-        #      summary: "A short description of the status."
-        #      description: "A short description of the status."
   - status_identifier: "continuous-integration/bitrise"
     opts:
       title: "Status Identifier"
