@@ -49,22 +49,21 @@ func createStatus(cfg config) error {
 	owner, repo := OwnerAndRepo(cfg.RepositoryURL)
 	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
-	body, err := json.Marshal(
-		struct {
-			State       string `json:"state"`
-			TargetURL   string `json:"target_url,omitempty"`
-			Description string `json:"description,omitempty"`
-			Context     string `json:"context,omitempty"`
-		}{
-			State:       getState(cfg.State),
-			TargetURL:   cfg.BuildURL,
-			Description: strings.Title(getState(cfg.State)),
-			Context:     cfg.StatusIdentifier,
-		})
+	statusReq := struct {
+		State       string `json:"state"`
+		TargetURL   string `json:"target_url,omitempty"`
+		Description string `json:"description,omitempty"`
+		Context     string `json:"context,omitempty"`
+	}{
+		State:       getState(cfg.State),
+		TargetURL:   cfg.BuildURL,
+		Description: strings.Title(getState(cfg.State)),
+		Context:     cfg.StatusIdentifier,
+	}
+	body, err := json.Marshal(statusReq)
 	if err != nil {
 		return err
 	}
-
 	req, err := http.NewRequest("POST", url, bytes.NewReader(body))
 	if err != nil {
 		return err
