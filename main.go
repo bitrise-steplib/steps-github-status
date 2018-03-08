@@ -23,28 +23,13 @@ type config struct {
 	StatusIdentifier string `env:"status_identifier"`
 }
 
-type statusRequest struct {
-	State       string `json:"state"`
-	TargetURL   string `json:"target_url,omitempty"`
-	Description string `json:"description,omitempty"`
-	Context     string `json:"context,omitempty"`
-}
-
-// getOwner get the owner part of a git repository url. Possible url formats:
+// OwnerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
 // - https://hostname/owner/repository.git
 // - git@hostname:owner/repository.git
-func getOwner(url string) string {
+func OwnerAndRepo(url string) (string, string) {
 	url = strings.TrimPrefix(strings.TrimPrefix(url, "https://"), "git@")
-	return strings.FieldsFunc(url, func(r rune) bool { return r == '/' || r == ':' })[1]
-}
-
-// getOwner get the repository part of a git repository url. Possible url formats:
-// - https://hostname/owner/repository.git
-// - git@hostname:owner/repository.git
-func getRepo(url string) string {
-	url = strings.TrimPrefix(strings.TrimPrefix(url, "https://"), "git@")
-	repo := strings.FieldsFunc(url, func(r rune) bool { return r == '/' || r == ':' })[2]
-	return strings.TrimSuffix(repo, ".git")
+	a := strings.FieldsFunc(url, func(r rune) bool { return r == '/' || r == ':' })
+	return a[1], strings.TrimSuffix(a[2], ".git")
 }
 
 func getState(preset string) string {
@@ -61,15 +46,21 @@ func getState(preset string) string {
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
 func createStatus(cfg config) error {
-	format := "%s/repos/%s/%s/statuses/%s"
-	url := fmt.Sprintf(format, cfg.APIURL, getOwner(cfg.RepositoryURL), getRepo(cfg.RepositoryURL), cfg.CommitHash)
+	owner, repo := OwnerAndRepo(cfg.RepositoryURL)
+	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
-	body, err := json.Marshal(statusRequest{
-		State:       getState(cfg.State),
-		TargetURL:   cfg.BuildURL,
-		Description: strings.Title(getState(cfg.State)),
-		Context:     cfg.StatusIdentifier,
-	})
+	body, err := json.Marshal(
+		struct {
+			State       string `json:"state"`
+			TargetURL   string `json:"target_url,omitempty"`
+			Description string `json:"description,omitempty"`
+			Context     string `json:"context,omitempty"`
+		}{
+			State:       getState(cfg.State),
+			TargetURL:   cfg.BuildURL,
+			Description: strings.Title(getState(cfg.State)),
+			Context:     cfg.StatusIdentifier,
+		})
 	if err != nil {
 		return err
 	}
@@ -106,8 +97,7 @@ func main() {
 	}
 	stepconf.Print(cfg)
 
-	err := createStatus(cfg)
-	if err != nil {
+	if err := createStatus(cfg); err != nil {
 		log.Errorf("Error: %s\n", err)
 		os.Exit(1)
 	}

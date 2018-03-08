@@ -64,7 +64,7 @@ inputs:
       title: "Set Specific Status"
       summary: ""
       description: |-
-        The state of the status. Can be one of `auto`, `pending`, `success`, `error`, or `failure`.
+        The state of the status.
 
         If you select `auto` the step will send `success` status if the current build status is success (no step failed previously)
         or `failure` status if the build previously failed.
