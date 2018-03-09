@@ -43,7 +43,8 @@ inputs:
       title: "Build URL"
       summary: ""
       description: |-
-        Build URL with detailed information for the build
+        The target URL to associate with this status.
+        This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
       is_required: true
   - api_base_url: "https://api.github.com"
     opts:
@@ -51,19 +52,25 @@ inputs:
       summary: ""
       description: |-
         API URL for GitHub or Github Enterprise
-      is_required: true
   - status_identifier: "continuous-integration/bitrise"
     opts:
       title: "Status Identifier"
-      summary: ""
+      summary: "The Identifier to be used for this status"
       description: |-
-        The Identifier to be used for this status
-      is_required: true
-  - set_specific_status: ""
+        A string label to differentiate this status from the status of other systems.
+        Default: `default`
+  - set_specific_status: "auto"
     opts:
       title: "Set Specific Status"
       summary: ""
       description: |-
-        If set, this step will set a specific status instead of reporting the current build status.
-        
-        Can be one of pending, success, error, or failure.
+        The state of the status.
+
+        If you select `auto` the step will send `success` status if the current build status is success (no step failed previously)
+        or `failure` status if the build previously failed.
+      value_options:
+      - "auto"
+      - "pending"
+      - "success"
+      - "error"
+      - "failure"
