@@ -1,6 +1,11 @@
-## Changelog (Current version: 1.1.1)
+## Changelog (Current version: 2.0.0)
 
 -----------------
+
+### 2.0.0 (2018 Mar 09)
+
+* [fe5b706] Bump version to 2.0.0
+* [fb3d09a] Rewrite the step in Go (#14)
 
 ### 1.1.1 (2018 Mar 05)
 
@@ -49,4 +54,4 @@
 
 -----------------
 
-Updated: 2018 Mar 05
+Updated: 2018 Mar 09
