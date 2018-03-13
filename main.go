@@ -83,7 +83,12 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
-	defer resp.Body.Close()
+	if err := resp.Body.Close(); err != nil {
+		return err
+	}
+	if 200 > resp.StatusCode || resp.StatusCode >= 300 {
+		return fmt.Errorf("server error: %s", resp.Status)
+	}
 
 	return err
 }
