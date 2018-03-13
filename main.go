@@ -21,6 +21,14 @@ type config struct {
 	State            string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
 	BuildURL         string `env:"build_url"`
 	StatusIdentifier string `env:"status_identifier"`
+	Description      string `env:"description"`
+}
+
+type statusRequest struct {
+	State       string `json:"state"`
+	TargetURL   string `json:"target_url,omitempty"`
+	Description string `json:"description,omitempty"`
+	Context     string `json:"context,omitempty"`
 }
 
 // OwnerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
@@ -42,6 +50,13 @@ func getState(preset string) string {
 	return "failure"
 }
 
+func getDescription(desc, state string) string {
+	if desc == "" {
+		strings.Title(getState(state))
+	}
+	return desc
+}
+
 // createStatus creates a commit status for the given commit.
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
@@ -49,18 +64,12 @@ func createStatus(cfg config) error {
 	owner, repo := OwnerAndRepo(cfg.RepositoryURL)
 	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
-	statusReq := struct {
-		State       string `json:"state"`
-		TargetURL   string `json:"target_url,omitempty"`
-		Description string `json:"description,omitempty"`
-		Context     string `json:"context,omitempty"`
-	}{
+	body, err := json.Marshal(statusRequest{
 		State:       getState(cfg.State),
 		TargetURL:   cfg.BuildURL,
-		Description: strings.Title(getState(cfg.State)),
+		Description: getDescription(cfg.Description, cfg.State),
 		Context:     cfg.StatusIdentifier,
-	}
-	body, err := json.Marshal(statusReq)
+	})
 	if err != nil {
 		return err
 	}
