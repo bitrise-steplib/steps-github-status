@@ -83,11 +83,7 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.Warnf(err.Error())
-		}
-	}()
+	defer resp.Body.Close()
 
 	return err
 }

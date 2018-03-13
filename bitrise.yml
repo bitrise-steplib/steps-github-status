@@ -74,7 +74,7 @@ workflows:
             #!/usr/bin/env bash
             set -ex
 
-            errcheck -asserts=true -blank=true $GOLIST_WITHOUT_VENDOR
+            errcheck -exclude <(echo "(io.Closer).Close") -asserts=true -blank=true $GOLIST_WITHOUT_VENDOR
     - script:
         title: Go lint
         inputs:
