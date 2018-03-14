@@ -61,7 +61,7 @@ func getDescription(desc, state string) string {
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
 func createStatus(cfg config) error {
-	owner, repo := OwnerAndRepo(cfg.RepositoryURL)
+	owner, repo := ownerAndRepo(cfg.RepositoryURL)
 	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
 	body, err := json.Marshal(statusRequest{
