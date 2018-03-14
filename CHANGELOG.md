@@ -1,6 +1,11 @@
-## Changelog (Current version: 2.0.0)
+## Changelog (Current version: 2.1.0)
 
 -----------------
+
+### 2.1.0 (2018 Mar 14)
+
+* [bae4e4d] Bump version to 2.1.0
+* [26cd213] New input: description - A short description of the status (#15)
 
 ### 2.0.0 (2018 Mar 09)
 
@@ -54,4 +59,4 @@
 
 -----------------
 
-Updated: 2018 Mar 09
+Updated: 2018 Mar 14
