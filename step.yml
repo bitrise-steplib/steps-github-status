@@ -81,4 +81,4 @@ inputs:
       description: |-
         A short description of the status.
 
-        If leaved empty, it will be the status of the build.
+        If left empty, it will be the status of the build.

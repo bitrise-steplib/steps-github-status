@@ -31,10 +31,10 @@ type statusRequest struct {
 	Context     string `json:"context,omitempty"`
 }
 
-// OwnerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
+// ownerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
 // - https://hostname/owner/repository.git
 // - git@hostname:owner/repository.git
-func OwnerAndRepo(url string) (string, string) {
+func ownerAndRepo(url string) (string, string) {
 	url = strings.TrimPrefix(strings.TrimPrefix(url, "https://"), "git@")
 	a := strings.FieldsFunc(url, func(r rune) bool { return r == '/' || r == ':' })
 	return a[1], strings.TrimSuffix(a[2], ".git")
