@@ -21,12 +21,20 @@ type config struct {
 	State            string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
 	BuildURL         string `env:"build_url"`
 	StatusIdentifier string `env:"status_identifier"`
+	Description      string `env:"description"`
 }
 
-// OwnerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
+type statusRequest struct {
+	State       string `json:"state"`
+	TargetURL   string `json:"target_url,omitempty"`
+	Description string `json:"description,omitempty"`
+	Context     string `json:"context,omitempty"`
+}
+
+// ownerAndRepo returns the owner and the repository part of a git repository url. Possible url formats:
 // - https://hostname/owner/repository.git
 // - git@hostname:owner/repository.git
-func OwnerAndRepo(url string) (string, string) {
+func ownerAndRepo(url string) (string, string) {
 	url = strings.TrimPrefix(strings.TrimPrefix(url, "https://"), "git@")
 	a := strings.FieldsFunc(url, func(r rune) bool { return r == '/' || r == ':' })
 	return a[1], strings.TrimSuffix(a[2], ".git")
@@ -42,25 +50,26 @@ func getState(preset string) string {
 	return "failure"
 }
 
+func getDescription(desc, state string) string {
+	if desc == "" {
+		strings.Title(getState(state))
+	}
+	return desc
+}
+
 // createStatus creates a commit status for the given commit.
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
 func createStatus(cfg config) error {
-	owner, repo := OwnerAndRepo(cfg.RepositoryURL)
+	owner, repo := ownerAndRepo(cfg.RepositoryURL)
 	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
-	statusReq := struct {
-		State       string `json:"state"`
-		TargetURL   string `json:"target_url,omitempty"`
-		Description string `json:"description,omitempty"`
-		Context     string `json:"context,omitempty"`
-	}{
+	body, err := json.Marshal(statusRequest{
 		State:       getState(cfg.State),
 		TargetURL:   cfg.BuildURL,
-		Description: strings.Title(getState(cfg.State)),
+		Description: getDescription(cfg.Description, cfg.State),
 		Context:     cfg.StatusIdentifier,
-	}
-	body, err := json.Marshal(statusReq)
+	})
 	if err != nil {
 		return err
 	}
@@ -74,11 +83,12 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.Warnf(err.Error())
-		}
-	}()
+	if err := resp.Body.Close(); err != nil {
+		return err
+	}
+	if 200 > resp.StatusCode || resp.StatusCode >= 300 {
+		return fmt.Errorf("server error: %s", resp.Status)
+	}
 
 	return err
 }

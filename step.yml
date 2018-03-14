@@ -74,3 +74,11 @@ inputs:
       - "success"
       - "error"
       - "failure"
+  - description:
+    opts:
+      title: "Description"
+      summary: "A short description of the status."
+      description: |-
+        A short description of the status.
+
+        If left empty, it will be the status of the build.
