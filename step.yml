@@ -11,6 +11,7 @@ type_tags:
 is_requires_admin_user: false
 is_always_run: true
 is_skippable: true
+
 inputs:
   - auth_token: ""
     opts:
@@ -24,6 +25,8 @@ inputs:
 
         Add repo/repo:status scope to the generated token, to allow to update the repo status.
       is_required: true
+      is_expand: true
+      is_sensitive: true
   - repository_url: "$GIT_REPOSITORY_URL"
     opts:
       title: "Repository URL"
@@ -46,12 +49,16 @@ inputs:
         The target URL to associate with this status.
         This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
       is_required: true
+      is_expand: true
+      is_sensitive: true
   - api_base_url: "https://api.github.com"
     opts:
       title: "GitHub API base url"
       summary: ""
       description: |-
         API URL for GitHub or Github Enterprise
+      is_expand: true
+      is_sensitive: true
   - status_identifier: "continuous-integration/bitrise"
     opts:
       title: "Status Identifier"
