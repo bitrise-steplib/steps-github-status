@@ -50,7 +50,6 @@ inputs:
         This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
       is_required: true
       is_expand: true
-      is_sensitive: true
   - api_base_url: "https://api.github.com"
     opts:
       title: "GitHub API base url"
