@@ -96,9 +96,9 @@ func createStatus(cfg config) error {
 		log.Fatal(err)
 	}
 	
-	log.Infof("Resopnse Body: %s", responseBody)
+	return fmt.Warnf("Resopnse Body: %s", responseBody)
 	
-	return err
+	//return err
 }
 
 func main() {
