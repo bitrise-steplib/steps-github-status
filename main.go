@@ -90,9 +90,6 @@ func createStatus(cfg config) error {
 		return fmt.Errorf("server error: %s", resp.Status)
 	}
 	
-	log.Warnf("Response Status: %s\n", resp.Status)
-	log.Warnf("Response Body: %s\n", resp.Body)
-	
 	return err
 }
 
