@@ -90,6 +90,14 @@ func createStatus(cfg config) error {
 		return fmt.Errorf("server error: %s", resp.Status)
 	}
 	
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	log.Infof("Resopnse Body: %s", responseBody)
+	
 	return err
 }
 
