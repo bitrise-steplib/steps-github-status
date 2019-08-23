@@ -84,6 +84,12 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
+	
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("error: %s", err)
+	}
+	
 	if err := resp.Body.Close(); err != nil {
 		return err
 	}
@@ -91,11 +97,7 @@ func createStatus(cfg config) error {
 		return fmt.Errorf("server error: %s", resp.Status)
 	}
 	
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+	
 	
 	return fmt.Errorf("Resopnse Body: %s", responseBody)
 	
