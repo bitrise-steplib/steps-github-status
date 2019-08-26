@@ -97,7 +97,7 @@ func createStatus(cfg config) error {
 		return fmt.Errorf("server error: %s", resp.Status)
 	}
 	
-	return responseBody
+	return fmt.Errorf("error: %s", responseBody)
 }
 
 func main() {
