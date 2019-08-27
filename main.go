@@ -94,7 +94,7 @@ func createStatus(cfg config) error {
 		return err
 	}
 	if 200 > resp.StatusCode || resp.StatusCode >= 300 {
-		return fmt.Errorf("server error: %s", resp.Status)
+		return fmt.Errorf("server error: %s \n status: %s", resp.Status, resp.StatusCode)
 	}
 	
 	return fmt.Errorf("error: %s", responseBody)
