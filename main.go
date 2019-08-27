@@ -87,7 +87,7 @@ func createStatus(cfg config) error {
 	
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("error: %s", err)
+		return fmt.Errorf("error during response body read: %s \n status: %s", err, resp.StatusCode)
 	}
 	
 	if err := resp.Body.Close(); err != nil {
