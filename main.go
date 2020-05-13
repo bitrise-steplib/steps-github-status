@@ -86,8 +86,8 @@ func createStatus(cfg config) error {
 	if err := resp.Body.Close(); err != nil {
 		return err
 	}
-	if 200 > resp.StatusCode || resp.StatusCode >= 300 {
-		return fmt.Errorf("server error: %s", resp.Status)
+	if resp.StatusCode != 201 {
+		return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
 	}
 
 	return err
