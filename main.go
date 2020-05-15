@@ -84,9 +84,13 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
-	if err := resp.Body.Close(); err != nil {
-		return err
-	}
+
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Errorf("Error when closing HTTP response body:", err)
+		}
+	}()
+
 	if resp.StatusCode != 201 {
 		bodyBytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
