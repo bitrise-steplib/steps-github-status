@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -87,7 +88,12 @@ func createStatus(cfg config) error {
 		return err
 	}
 	if resp.StatusCode != 201 {
-		return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+		}
+
+		return fmt.Errorf("server error, unexpected status code: %s, body: %s", resp.Status, string(bodyBytes))
 	}
 
 	return err
