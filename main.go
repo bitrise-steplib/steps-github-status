@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -83,11 +84,20 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
-	if err := resp.Body.Close(); err != nil {
-		return err
-	}
-	if 200 > resp.StatusCode || resp.StatusCode >= 300 {
-		return fmt.Errorf("server error: %s", resp.Status)
+
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Errorf("Error when closing HTTP response body:", err)
+		}
+	}()
+
+	if resp.StatusCode != 201 {
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+		}
+
+		return fmt.Errorf("server error, unexpected status code: %s, body: %s", resp.Status, string(bodyBytes))
 	}
 
 	return err
