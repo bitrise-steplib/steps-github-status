@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"strings"
 
@@ -92,12 +92,17 @@ func createStatus(cfg config) error {
 	}()
 
 	if resp.StatusCode != 201 {
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		responseStr, err := httputil.DumpResponse(resp, true)
 		if err != nil {
-			return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+			return fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
 		}
 
-		return fmt.Errorf("server error, unexpected status code: %s, body: %s", resp.Status, string(bodyBytes))
+		requestStr, err := httputil.DumpRequest(req, true)
+		if err != nil {
+			return fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
+		}
+
+		return fmt.Errorf("server error, unexpected status code: %s, request: \n%s\n response: \n%s", resp.Status, string(requestStr), string(responseStr))
 	}
 
 	return err
