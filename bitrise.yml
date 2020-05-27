@@ -8,7 +8,7 @@ app:
   # define these in your .bitrise.secrets.yml
   - TEST_AUTH_TOKEN: "$TEST_AUTH_TOKEN"
   - TEST_REPOSITORY_URL: $TEST_REPOSITORY_URL
-  - TEST_GIT_COMMIT: $TEST_GIT_COMMIT
+  - TEST_GIT_COMMIT: "$TEST_GIT_COMMIT a"
   - TEST_BUILD_URL: $TEST_BUILD_URL
   - STEP_ID_IN_STEPLIB: github-status
 
@@ -37,7 +37,7 @@ workflows:
         inputs:
         - auth_token: "$TEST_AUTH_TOKEN"
         - repository_url: "$TEST_REPOSITORY_URL"
-        - commit_hash: "$TEST_GIT_COMMITq"
+        - commit_hash: "$TEST_GIT_COMMIT"
         - build_url: $TEST_BUILD_URL
         - set_specific_status: success
         - description: Your job passed on CI
