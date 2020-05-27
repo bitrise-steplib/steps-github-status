@@ -87,11 +87,11 @@ inputs:
         A short description of the status.
 
         If left empty, it will be the status of the build.
-  - verbose: "false"
+  - verbose: "no"
     opts:
       title: "Verbose logging"
       summary: "Prints extra logs."
       description: "Prints extra logs."
       value_options:
-      - "true"
-      - "false"
+      - "yes"
+      - "no"
