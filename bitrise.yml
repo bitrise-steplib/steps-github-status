@@ -33,11 +33,13 @@ workflows:
     steps:
     - path::./:
         title: Test success status
+        is_skippable: false
         inputs:
         - auth_token: "$TEST_AUTH_TOKEN"
         - repository_url: "$TEST_REPOSITORY_URL"
         - commit_hash: "$TEST_GIT_COMMIT"
         - build_url: $TEST_BUILD_URL
+        - verbose: "true"
 
   _test_failed:
     steps:

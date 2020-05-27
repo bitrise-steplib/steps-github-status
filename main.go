@@ -23,6 +23,7 @@ type config struct {
 	BuildURL         string `env:"build_url"`
 	StatusIdentifier string `env:"status_identifier"`
 	Description      string `env:"description"`
+	Verbose          bool   `env:"verbose"`
 }
 
 type statusRequest struct {
@@ -56,6 +57,20 @@ func getDescription(desc, state string) string {
 		strings.Title(getState(state))
 	}
 	return desc
+}
+
+func httpDump(req *http.Request, resp *http.Response) (string, error) {
+	responseStr, err := httputil.DumpResponse(resp, true)
+	if err != nil {
+		return "", fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
+	}
+
+	requestStr, err := httputil.DumpRequest(req, true)
+	if err != nil {
+		return "", fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
+	}
+
+	return "Request: " + string(requestStr) + "\nResponse: " + string(responseStr), nil
 }
 
 // createStatus creates a commit status for the given commit.
@@ -92,28 +107,25 @@ func createStatus(cfg config) error {
 	}()
 
 	if resp.StatusCode != 201 {
-		responseStr, err := httputil.DumpResponse(resp, true)
-		if err != nil {
-			return fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
-		}
-
-		requestStr, err := httputil.DumpRequest(req, true)
-		if err != nil {
-			return fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
-		}
-
-		return fmt.Errorf("server error, unexpected status code: %s, request: \n%s\n response: \n%s", resp.Status, string(requestStr), string(responseStr))
+		cfg.Verbose = true
 	}
 
-	return err
+	if cfg.Verbose {
+		d, err := httpDump(req, resp)
+		if err != nil {
+			return err
+		}
+		fmt.Println(d)
+	}
+
+	if resp.StatusCode != 201 {
+		return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+	}
+
+	return nil
 }
 
 func main() {
-	if os.Getenv("commit_hash") == "" {
-		log.Warnf("GitHub requires a commit hash for build status reporting")
-		os.Exit(1)
-	}
-
 	var cfg config
 	if err := stepconf.Parse(&cfg); err != nil {
 		log.Errorf("Error: %s\n", err)
