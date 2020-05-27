@@ -25,6 +25,7 @@ workflows:
     - errcheck:
     - go-test:
     after_run:
+    - _test_success_repro
     - _test_success
     - _test_failed
     - _test_no_commit_hash
@@ -38,6 +39,19 @@ workflows:
         - repository_url: "$TEST_REPOSITORY_URL"
         - commit_hash: "$TEST_GIT_COMMIT"
         - build_url: $TEST_BUILD_URL
+        - set_specific_status: success
+
+  _test_success_repro:
+    steps:
+    - path::./:
+        title: Test success status
+        inputs:
+        - auth_token: "$TEST_AUTH_TOKEN"
+        - repository_url: "$TEST_REPOSITORY_URL"
+        - commit_hash: "$TEST_GIT_COMMIT"
+        - build_url: $TEST_BUILD_URL
+        - set_specific_status: "success"
+        - status_identifier: "ci/unit_tests"
 
   _test_failed:
     steps:
