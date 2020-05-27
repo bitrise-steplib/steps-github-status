@@ -37,7 +37,7 @@ workflows:
         inputs:
         - auth_token: "$TEST_AUTH_TOKEN"
         - repository_url: "$TEST_REPOSITORY_URL"
-        - commit_hash: "$TEST_GIT_COMMIT"
+        - commit_hash: "$TEST_GIT_COMMITq"
         - build_url: $TEST_BUILD_URL
         - set_specific_status: success
         - description: Your job passed on CI
