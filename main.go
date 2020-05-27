@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"strings"
 
@@ -23,6 +23,7 @@ type config struct {
 	BuildURL         string `env:"build_url"`
 	StatusIdentifier string `env:"status_identifier"`
 	Description      string `env:"description"`
+	Verbose          bool   `env:"verbose"`
 }
 
 type statusRequest struct {
@@ -58,6 +59,20 @@ func getDescription(desc, state string) string {
 	return desc
 }
 
+func httpDump(req *http.Request, resp *http.Response) (string, error) {
+	responseStr, err := httputil.DumpResponse(resp, true)
+	if err != nil {
+		return "", fmt.Errorf("unable to dump response, error: %s", err)
+	}
+
+	requestStr, err := httputil.DumpRequest(req, true)
+	if err != nil {
+		return "", fmt.Errorf("unable to dump request, error: %s", err)
+	}
+
+	return "Request: " + string(requestStr) + "\nResponse: " + string(responseStr), nil
+}
+
 // createStatus creates a commit status for the given commit.
 // see also: https://developer.github.com/v3/repos/statuses/#create-a-status
 // POST /repos/:owner/:repo/statuses/:sha
@@ -91,24 +106,22 @@ func createStatus(cfg config) error {
 		}
 	}()
 
-	if resp.StatusCode != 201 {
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != 201 || cfg.Verbose {
+		d, err := httpDump(req, resp)
 		if err != nil {
-			return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+			return err
 		}
-
-		return fmt.Errorf("server error, unexpected status code: %s, body: %s", resp.Status, string(bodyBytes))
+		fmt.Println(d)
 	}
 
-	return err
+	if resp.StatusCode != 201 {
+		return fmt.Errorf("server error, unexpected status code: %s", resp.Status)
+	}
+
+	return nil
 }
 
 func main() {
-	if os.Getenv("commit_hash") == "" {
-		log.Warnf("GitHub requires a commit hash for build status reporting")
-		os.Exit(1)
-	}
-
 	var cfg config
 	if err := stepconf.Parse(&cfg); err != nil {
 		log.Errorf("Error: %s\n", err)

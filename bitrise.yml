@@ -25,6 +25,7 @@ workflows:
     - errcheck:
     - go-test:
     after_run:
+    - _test_invalid
     - _test_success
     - _test_failed
     - _test_no_commit_hash
@@ -33,10 +34,22 @@ workflows:
     steps:
     - path::./:
         title: Test success status
+        is_skippable: false
         inputs:
         - auth_token: "$TEST_AUTH_TOKEN"
         - repository_url: "$TEST_REPOSITORY_URL"
         - commit_hash: "$TEST_GIT_COMMIT"
+        - build_url: $TEST_BUILD_URL
+        - verbose: "true"
+
+  _test_invalid:
+    steps:
+    - path::./:
+        title: Test invalid commit hash
+        inputs:
+        - auth_token: "$TEST_AUTH_TOKEN"
+        - repository_url: "$TEST_REPOSITORY_URL"
+        - commit_hash: "invalid"
         - build_url: $TEST_BUILD_URL
 
   _test_failed:
