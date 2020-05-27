@@ -62,7 +62,7 @@ func getDescription(desc, state string) string {
 func httpDump(req *http.Request, resp *http.Response) (string, error) {
 	responseStr, err := httputil.DumpResponse(resp, true)
 	if err != nil {
-		return "", fmt.Errorf("unable to dump request, error: %s", err)
+		return "", fmt.Errorf("unable to dump response, error: %s", err)
 	}
 
 	requestStr, err := httputil.DumpRequest(req, true)
