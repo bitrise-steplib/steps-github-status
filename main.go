@@ -62,12 +62,12 @@ func getDescription(desc, state string) string {
 func httpDump(req *http.Request, resp *http.Response) (string, error) {
 	responseStr, err := httputil.DumpResponse(resp, true)
 	if err != nil {
-		return "", fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
+		return "", fmt.Errorf("unable to dump request, error: %s", err)
 	}
 
 	requestStr, err := httputil.DumpRequest(req, true)
 	if err != nil {
-		return "", fmt.Errorf("unable to dump request, unexpected status code: %s", resp.Status)
+		return "", fmt.Errorf("unable to dump request, error: %s", err)
 	}
 
 	return "Request: " + string(requestStr) + "\nResponse: " + string(responseStr), nil
@@ -106,11 +106,7 @@ func createStatus(cfg config) error {
 		}
 	}()
 
-	if resp.StatusCode != 201 {
-		cfg.Verbose = true
-	}
-
-	if cfg.Verbose {
+	if resp.StatusCode != 201 || cfg.Verbose {
 		d, err := httpDump(req, resp)
 		if err != nil {
 			return err
