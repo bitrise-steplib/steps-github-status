@@ -16,7 +16,7 @@ inputs:
   - auth_token: ""
     opts:
       title: "GitHub auth token"
-      summary: ""
+      summary: "GitHub auth token with proper scopes"
       description: |-
         Authorization token for GitHub applications
 
@@ -29,21 +29,21 @@ inputs:
   - repository_url: "$GIT_REPOSITORY_URL"
     opts:
       title: "Repository URL"
-      summary: ""
+      summary: "The URL of the repository"
       description: |-
         The URL for the repository we are working with
       is_required: true
   - commit_hash: "$BITRISE_GIT_COMMIT"
     opts:
       title: "Commit hash"
-      summary: ""
+      summary: "Commit hash to check"
       description: |-
         The commit hash for the commit we are working with
       is_required: true
   - build_url: "$BITRISE_BUILD_URL"
     opts:
       title: "Build URL"
-      summary: ""
+      summary: "Build URL for this status"
       description: |-
         The target URL to associate with this status.
         This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
@@ -52,7 +52,7 @@ inputs:
   - api_base_url: "https://api.github.com"
     opts:
       title: "GitHub API base url"
-      summary: ""
+      summary: "GitHub API base URL"
       description: |-
         API URL for GitHub or Github Enterprise
       is_expand: true
@@ -66,7 +66,7 @@ inputs:
   - set_specific_status: "auto"
     opts:
       title: "Set Specific Status"
-      summary: ""
+      summary: "The state of the status"
       description: |-
         The state of the status.
 
