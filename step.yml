@@ -16,7 +16,7 @@ inputs:
   - auth_token: ""
     opts:
       title: "GitHub auth token"
-      summary: "GitHub auth token with repo/repo:status scope access"
+      summary: "GitHub auth token with proper scopes"
       description: |-
         Authorization token for GitHub applications
 
@@ -29,7 +29,7 @@ inputs:
   - repository_url: "$GIT_REPOSITORY_URL"
     opts:
       title: "Repository URL"
-      summary: "Repository URL"
+      summary: "The URL of the repository"
       description: |-
         The URL for the repository we are working with
       is_required: true
