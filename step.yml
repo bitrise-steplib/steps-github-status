@@ -1,25 +1,25 @@
 title: GitHub Status
 summary: |- Update commit status for GitHub repositories.
 description: |- 
-  This Step updates the commit status for a GitHub repository of your choice with this build's status. Useful anytime you can not or do not want to provide Bitrise write access to your git repo.
+  This Step updates the commit status for a GitHub repository (repo) of your choice with this build's status. Useful anytime you can not or do not want to provide Bitrise write access to your git repo.
   
   ### Configuring the Step
   
-  1. In the **Authorization token for GitHub applications** Step input,  you need to provide a token you generated on [GitHub](https://github.com/settings/tokens), with `repo/repo:status` scope.
+  1. In the **Authorization token for GitHub applications** Step input, you need to provide a token you generated on [GitHub](https://github.com/settings/tokens), with `repo/repo:status` scope.
   2. The **Repository URL** input is populated automatically with a variable the value of which is taken from the repository field of the Settings of your app.
   3. The **Commit hash** input is filled in by default with the variable inherited from the **Git Clone** Step.
-  4. The **Build URL** Step input is also filled in automatically, this is the URL that is going to be forwarded to GitHub as the source of the status.
+  4. The **Build URL** Step input is also filled in automatically, this is the URL that is forwarded to GitHub as the source of the status.
   5. The **GitHub API base URL** is the URL for GitHub's API service, has to be modified if you are running an Enterprise GitHub instance.
-  6. With the **Status Identifier** Step input, you can adjust under what name under which the CI status shows up.
-  7.The input **Set Specific Status** has a default value of `auto` which will reflect the status of the build, but this input allows you to update the commit with any given status, regardless of the outcome of the build.
+  6. With the **Status Identifier** Step input, you can adjust under what name which CI status shows up.
+  7. The input **Set Specific Status** has a default value of `auto` which reflects the status of the build, but this input allows you to update the commit with any given status, regardless of the outcome of the build.
   8. The **Description** input allows you to provide a short description for the status. 
   9. **Verbose logging** can be turned on to print out additional information within the build logs. 
 
   ### Troubleshooting
   
-  If you get a 404 response when running the step, check your token's scope and validity.
-  If you use GitHub Enterprise, make sure your API base URL is set to: `http(s)://hostname/api/v3/`
-  If you do not see your status being reflected, double-check Repository URL and Commit hash values. 
+  If you get a 404 response when running the Step, check your token's scope and validity.
+  If you use GitHub Enterprise, make sure your API base URL is set to `http(s)://hostname/api/v3/`.
+  If you do not see your status being reflected, double-check **Repository URL** and **Commit hash** input values. 
 
   ### Useful links
  
@@ -96,7 +96,7 @@ inputs:
       description: |-
         The state of the status.
 
-        If you select `auto`, the step will send `success` status if the current build status is successful (no step failed previously)
+        If you select `auto`, the step will send `success` status if the current build status is successful (no Step failed previously)
         or `failure` status if the build previously failed.
       value_options:
       - "auto"
