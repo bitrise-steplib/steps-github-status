@@ -1,5 +1,5 @@
 title: GitHub Status
-summary: |- Update commit status for GitHub repositories.
+summary: Update commit status for GitHub repositories.
 description: |- 
   This Step updates the commit status for a GitHub repository (repo) of your choice with this build's status. Useful anytime you can not or do not want to provide Bitrise write access to your git repo.
   
