@@ -10,7 +10,9 @@ import (
 	"strings"
 
 	"github.com/bitrise-io/go-utils/log"
+	"github.com/bitrise-io/go-utils/retry"
 	"github.com/bitrise-tools/go-steputils/stepconf"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 type config struct {
@@ -89,13 +91,14 @@ func createStatus(cfg config) error {
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest("POST", url, bytes.NewReader(body))
+	req, err := retryablehttp.NewRequest("POST", url, bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Authorization", "token "+cfg.AuthToken)
 
-	resp, err := http.DefaultClient.Do(req)
+	client := retry.NewHTTPClient()
+	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
 	}
