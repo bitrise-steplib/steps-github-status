@@ -56,7 +56,7 @@ func getState(preset string) string {
 
 func getDescription(desc, state string) string {
 	if desc == "" {
-		strings.Title(getState(state))
+		return strings.Title(getState(state))
 	}
 	return desc
 }
