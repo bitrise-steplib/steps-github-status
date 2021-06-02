@@ -38,6 +38,10 @@ is_requires_admin_user: false
 is_always_run: true
 is_skippable: true
 
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/steps-github-status
+
 inputs:
   - auth_token: ""
     opts:
