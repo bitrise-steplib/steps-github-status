@@ -9,9 +9,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/retry"
-	"github.com/bitrise-tools/go-steputils/stepconf"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -110,7 +110,7 @@ func createStatus(cfg config) error {
 	}()
 
 	if resp.StatusCode != 201 || cfg.Verbose {
-		d, err := httpDump(req, resp)
+		d, err := httpDump(req.Request, resp)
 		if err != nil {
 			return err
 		}
