@@ -48,7 +48,16 @@ func getState(preset string) string {
 	if preset != "auto" {
 		return preset
 	}
-	if os.Getenv("BITRISE_BUILD_STATUS") == "0" {
+
+	pipelineBuildStatus := os.Getenv("BITRISEIO_PIPELINE_BUILD_STATUS")
+	if pipelineBuildStatus == "succeeded" {
+		return "success"
+	} else if pipelineBuildStatus == "failed" {
+		return "failure"
+	}
+
+	workflowBuildStatus := os.Getenv("BITRISE_BUILD_STATUS")
+	if workflowBuildStatus == "0" {
 		return "success"
 	}
 	return "failure"
