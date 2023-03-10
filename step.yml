@@ -100,8 +100,8 @@ inputs:
       description: |-
         The state of the status.
 
-        If you select `auto`, the step will send `success` status if the current build or pipeline build status is successful  
-        or `failure` status if the build or pipeline previously failed.
+        If you select `auto`, the step will send `success` status if the current build status is successful (no Step failed previously)
+        or `failure` status if the build previously failed.
       value_options:
       - "auto"
       - "pending"
