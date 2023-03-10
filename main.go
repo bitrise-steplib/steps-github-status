@@ -9,10 +9,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/hashicorp/go-retryablehttp"
+
 	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/retry"
-	"github.com/hashicorp/go-retryablehttp"
 )
 
 type config struct {
@@ -50,9 +51,9 @@ func getState(preset string) string {
 	}
 
 	pipelineBuildStatus := os.Getenv("BITRISEIO_PIPELINE_BUILD_STATUS")
-	if pipelineBuildStatus == "succeeded" {
+	if pipelineBuildStatus == "succeeded" || pipelineBuildStatus == "succeeded_with_abort" {
 		return "success"
-	} else if pipelineBuildStatus == "failed" {
+	} else if pipelineBuildStatus == "failed" || pipelineBuildStatus == "aborted" {
 		return "failure"
 	}
 
