@@ -88,6 +88,7 @@ inputs:
         This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
       is_required: true
       is_expand: true
+      is_dont_change_value: true
   - pipeline_build_status: "$BITRISEIO_PIPELINE_BUILD_STATUS"
     opts:
       title: "Pipeline Build Status"
