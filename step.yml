@@ -70,6 +70,15 @@ inputs:
       description: |-
         The commit hash for the commit we are working with
       is_required: true
+  - build_status: "$BITRISE_BUILD_STATUS"
+    opts:
+      title: "Build Status"
+      summary: "It sets the status as if the Build had finished already"
+      description: |-
+        This status will be used for calculating the GitHub Status to send in case of a Build.
+      is_required: true
+      is_expand: true
+      is_dont_change_value: true
   - build_url: "$BITRISE_BUILD_URL"
     opts:
       title: "Build URL"

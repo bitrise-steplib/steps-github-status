@@ -23,6 +23,7 @@ type config struct {
 	APIURL        string `env:"api_base_url"`
 
 	State               string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
+	BuildStatus         string `env:"build_status"`
 	BuildURL            string `env:"build_url"`
 	PipelineBuildStatus string `env:"pipeline_build_status"`
 	PipelineBuildURL    string `env:"pipeline_build_url"`
@@ -60,8 +61,7 @@ func getState(cfg config) string {
 		return "failure"
 	}
 
-	workflowBuildStatus := os.Getenv("BITRISE_BUILD_STATUS")
-	if workflowBuildStatus == "0" {
+	if cfg.BuildStatus == "0" {
 		return "success"
 	}
 	return "failure"
