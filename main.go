@@ -20,16 +20,17 @@ type config struct {
 	AuthToken     string `env:"auth_token,required"`
 	RepositoryURL string `env:"repository_url,required"`
 	CommitHash    string `env:"commit_hash,required"`
-	APIURL        string `env:"api_base_url"`
 
-	State               string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
+	State            string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
+	Description      string `env:"description"`
+	StatusIdentifier string `env:"status_identifier"`
+	APIURL           string `env:"api_base_url,required"`
+	Verbose          bool   `env:"verbose,opt[yes,no]"`
+
 	BuildStatus         string `env:"build_status"`
 	BuildURL            string `env:"build_url"`
 	PipelineBuildStatus string `env:"pipeline_build_status"`
 	PipelineBuildURL    string `env:"pipeline_build_url"`
-	StatusIdentifier    string `env:"status_identifier"`
-	Description         string `env:"description"`
-	Verbose             bool   `env:"verbose"`
 }
 
 type statusRequest struct {
