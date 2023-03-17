@@ -40,7 +40,7 @@ workflows:
         - repository_url: "$TEST_REPOSITORY_URL"
         - commit_hash: "$TEST_GIT_COMMIT"
         - build_url: $TEST_BUILD_URL
-        - verbose: "true"
+        - verbose: "yes"
 
   _test_invalid:
     steps:
