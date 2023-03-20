@@ -9,23 +9,28 @@ import (
 	"os"
 	"strings"
 
+	"github.com/hashicorp/go-retryablehttp"
+
 	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/retry"
-	"github.com/hashicorp/go-retryablehttp"
 )
 
 type config struct {
 	AuthToken     string `env:"auth_token,required"`
 	RepositoryURL string `env:"repository_url,required"`
 	CommitHash    string `env:"commit_hash,required"`
-	APIURL        string `env:"api_base_url"`
 
 	State            string `env:"set_specific_status,opt[auto,pending,success,error,failure]"`
-	BuildURL         string `env:"build_url"`
-	StatusIdentifier string `env:"status_identifier"`
 	Description      string `env:"description"`
-	Verbose          bool   `env:"verbose"`
+	StatusIdentifier string `env:"status_identifier"`
+	APIURL           string `env:"api_base_url,required"`
+	Verbose          bool   `env:"verbose,opt[yes,no]"`
+
+	BuildStatus         string `env:"build_status"`
+	BuildURL            string `env:"build_url"`
+	PipelineBuildStatus string `env:"pipeline_build_status"`
+	PipelineBuildURL    string `env:"pipeline_build_url"`
 }
 
 type statusRequest struct {
@@ -44,21 +49,30 @@ func ownerAndRepo(url string) (string, string) {
 	return a[1], strings.TrimSuffix(a[2], ".git")
 }
 
-func getState(preset string) string {
-	if preset != "auto" {
-		return preset
+func getState(cfg config) string {
+	if cfg.State != "auto" {
+		return cfg.State
 	}
-	if os.Getenv("BITRISE_BUILD_STATUS") == "0" {
+
+	if cfg.PipelineBuildStatus != "" {
+		if cfg.PipelineBuildStatus == "succeeded" || cfg.PipelineBuildStatus == "succeeded_with_abort" {
+			return "success"
+		}
+
+		return "failure"
+	}
+
+	if cfg.BuildStatus == "0" {
 		return "success"
 	}
 	return "failure"
 }
 
-func getDescription(desc, state string) string {
-	if desc == "" {
-		return strings.Title(getState(state))
+func getDescription(cfg config) string {
+	if cfg.Description == "" {
+		return strings.Title(getState(cfg))
 	}
-	return desc
+	return cfg.Description
 }
 
 func httpDump(req *http.Request, resp *http.Response) (string, error) {
@@ -82,10 +96,15 @@ func createStatus(cfg config) error {
 	owner, repo := ownerAndRepo(cfg.RepositoryURL)
 	url := fmt.Sprintf("%s/repos/%s/%s/statuses/%s", cfg.APIURL, owner, repo, cfg.CommitHash)
 
+	buildURL := cfg.PipelineBuildURL
+	if buildURL == "" {
+		buildURL = cfg.BuildURL
+	}
+
 	body, err := json.Marshal(statusRequest{
-		State:       getState(cfg.State),
-		TargetURL:   cfg.BuildURL,
-		Description: getDescription(cfg.Description, cfg.State),
+		State:       getState(cfg),
+		TargetURL:   buildURL,
+		Description: getDescription(cfg),
 		Context:     cfg.StatusIdentifier,
 	})
 	if err != nil {

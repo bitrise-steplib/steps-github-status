@@ -54,7 +54,6 @@ inputs:
 
         Add repo/repo:status scope to the generated token to allow to update the repo status.
       is_required: true
-      is_expand: true
       is_sensitive: true
   - repository_url: "$GIT_REPOSITORY_URL"
     opts:
@@ -70,29 +69,6 @@ inputs:
       description: |-
         The commit hash for the commit we are working with
       is_required: true
-  - build_url: "$BITRISE_BUILD_URL"
-    opts:
-      title: "Build URL"
-      summary: "Build URL for this status"
-      description: |-
-        The target URL to associate with this status.
-        This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
-      is_required: true
-      is_expand: true
-  - api_base_url: "https://api.github.com"
-    opts:
-      title: "GitHub API base url"
-      summary: "GitHub API base URL"
-      description: |-
-        API URL for GitHub or Github Enterprise
-      is_expand: true
-  - status_identifier: "continuous-integration/bitrise"
-    opts:
-      title: "Status Identifier"
-      summary: "The Identifier to be used for this status"
-      description: |-
-        A string label to differentiate this status from the status of other systems.
-        Default: `default`
   - set_specific_status: "auto"
     opts:
       title: "Set Specific Status"
@@ -116,6 +92,19 @@ inputs:
         A short description of the status.
 
         If left empty, it will be the status of the build.
+  - status_identifier: "continuous-integration/bitrise"
+    opts:
+      title: "Status Identifier"
+      summary: "The Identifier to be used for this status"
+      description: |-
+        A string label to differentiate this status from the status of other systems.
+  - api_base_url: "https://api.github.com"
+    opts:
+      title: "GitHub API base url"
+      summary: "GitHub API base URL"
+      description: |-
+        API URL for GitHub or Github Enterprise
+      is_required: true
   - verbose: "no"
     opts:
       title: "Verbose logging"
@@ -124,3 +113,33 @@ inputs:
       value_options:
       - "yes"
       - "no"
+  - build_status: "$BITRISE_BUILD_STATUS"
+    opts:
+      title: "Build Status"
+      summary: "It sets the status as if the Build had finished already"
+      description: |-
+        This status will be used for calculating the GitHub Status to send in case of a Build.
+      is_dont_change_value: true
+  - build_url: "$BITRISE_BUILD_URL"
+    opts:
+      title: "Build URL"
+      summary: "Build URL for this status"
+      description: |-
+        The target URL to associate with this status.
+        This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
+      is_dont_change_value: true
+  - pipeline_build_status: "$BITRISEIO_PIPELINE_BUILD_STATUS"
+    opts:
+      title: "Pipeline Build Status"
+      summary: "It sets the status as if the Pipeline Build had finished with the previous stage (if applicable)"
+      description: |-
+        This status will be used for calculating the GitHub Status to send in case of a Pipeline Build.
+      is_dont_change_value: true
+  - pipeline_build_url: "$BITRISEIO_PIPELINE_BUILD_URL"
+    opts:
+      title: "Pipeline Build URL"
+      summary: "The URL of the Pipeline Build (if applicable)"
+      description: |-
+        The target URL of the Pipeline Build to associate with this status.
+        This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
+      is_dont_change_value: true
