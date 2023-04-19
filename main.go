@@ -54,15 +54,11 @@ func getState(cfg config) string {
 		return cfg.State
 	}
 
-	if cfg.PipelineBuildStatus != "" {
-		if cfg.PipelineBuildStatus == "succeeded" || cfg.PipelineBuildStatus == "succeeded_with_abort" {
-			return "success"
-		}
+	pipelineSuccess := cfg.PipelineBuildStatus == "" ||
+		cfg.PipelineBuildStatus == "succeeded" ||
+		cfg.PipelineBuildStatus == "succeeded_with_abort"
 
-		return "failure"
-	}
-
-	if cfg.BuildStatus == "0" {
+	if pipelineSuccess && cfg.BuildStatus == "0" {
 		return "success"
 	}
 	return "failure"
@@ -101,12 +97,14 @@ func createStatus(cfg config) error {
 		buildURL = cfg.BuildURL
 	}
 
-	body, err := json.Marshal(statusRequest{
-		State:       getState(cfg),
-		TargetURL:   buildURL,
-		Description: getDescription(cfg),
-		Context:     cfg.StatusIdentifier,
-	})
+	body, err := json.Marshal(
+		statusRequest{
+			State:       getState(cfg),
+			TargetURL:   buildURL,
+			Description: getDescription(cfg),
+			Context:     cfg.StatusIdentifier,
+		},
+	)
 	if err != nil {
 		return err
 	}
