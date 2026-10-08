@@ -30,6 +30,16 @@ workflows:
     steps:
     - bundle::yamlfmt: {}
     - bundle::step-yml-audit: {}
+    - script@1:
+        title: Add GOPATH/bin to PATH
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -eo pipefail
+            # The golangci-lint bundle installs into $(go env GOPATH)/bin and then invokes the
+            # binary by name. That directory is not on PATH on this stack, where Go is managed
+            # by asdf, so the bundle fails with "golangci-lint: command not found".
+            envman add --key PATH --value "$(go env GOPATH)/bin:$PATH"
     - bundle::golangci-lint:
         inputs:
         - golangci_lint_version: 2.11.4
